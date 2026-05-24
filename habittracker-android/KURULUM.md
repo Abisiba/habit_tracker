@@ -42,38 +42,6 @@ for update
 to anon
 using (id = 'default')
 with check (id = 'default');
-
-create or replace function public.habittracker_prevent_stale_update()
-returns trigger
-language plpgsql
-as $$
-declare
-  old_modified timestamptz;
-  new_modified timestamptz;
-begin
-  old_modified := nullif(old.data->>'lastModified', '')::timestamptz;
-  new_modified := nullif(new.data->>'lastModified', '')::timestamptz;
-
-  if old_modified is not null
-     and new_modified is not null
-     and new_modified < old_modified then
-    return old;
-  end if;
-
-  return new;
-exception
-  when others then
-    return new;
-end;
-$$;
-
-drop trigger if exists habittracker_prevent_stale_update
-on public.habittracker_state;
-
-create trigger habittracker_prevent_stale_update
-before update on public.habittracker_state
-for each row
-execute function public.habittracker_prevent_stale_update();
 ```
 
 3. Project Settings -> API ekranından bilgileri kopyala:
@@ -120,38 +88,13 @@ grant select, insert, update on public.habittracker_state to anon;
 İkinci tıklamada tik geri geliyorsa eski bir sync isteği yeni veriyi eziyor olabilir. Bunu engellemek için SQL Editor'da şunu da çalıştır:
 
 ```sql
-create or replace function public.habittracker_prevent_stale_update()
-returns trigger
-language plpgsql
-as $$
-declare
-  old_modified timestamptz;
-  new_modified timestamptz;
-begin
-  old_modified := nullif(old.data->>'lastModified', '')::timestamptz;
-  new_modified := nullif(new.data->>'lastModified', '')::timestamptz;
-
-  if old_modified is not null
-     and new_modified is not null
-     and new_modified < old_modified then
-    return old;
-  end if;
-
-  return new;
-exception
-  when others then
-    return new;
-end;
-$$;
-
 drop trigger if exists habittracker_prevent_stale_update
 on public.habittracker_state;
 
-create trigger habittracker_prevent_stale_update
-before update on public.habittracker_state
-for each row
-execute function public.habittracker_prevent_stale_update();
+drop function if exists public.habittracker_prevent_stale_update();
 ```
+
+Bu trigger eski timezone'suz `lastModified` değerlerinde geçerli güncellemeleri reddedebildiği için artık önerilmez.
 
 ## Güvenlik
 
