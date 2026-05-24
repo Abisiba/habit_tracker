@@ -1,0 +1,31 @@
+# OS/editor noise
+.DS_Store
+*.log
+*.swp
+.idea/
+*.iml
+
+# Flutter/Dart
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/build/
+**/coverage/
+
+# Android/Gradle local state
+**/.gradle/
+**/.kotlin/
+**/local.properties
+**/.cxx/
+**/captures/
+**/key.properties
+**/*.keystore
+**/*.jks
+
+# Generated APKs and release artifacts
+*.apk
+*.aab
+*.symbols
+*.map.json

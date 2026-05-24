@@ -1,0 +1,14 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [{"Email": "user@localhost", "Name": "User"}],
+        "Category": "Utilities",
+        "Description": "Daily Habit Tracker",
+        "Icon": "preferences-activities",
+        "Id": "com.user.habittracker",
+        "License": "GPL-2.0+",
+        "Name": "Habit Tracker",
+        "Version": "1.0"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
